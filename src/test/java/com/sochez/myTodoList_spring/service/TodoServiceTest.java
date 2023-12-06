@@ -48,6 +48,11 @@ class TodoServiceTest {
     }
 
     @Test
+    void shouldReturnFalseForCompletingNonExistingTodo() {
+        assertFalse(todoService.completeTask(new Random().nextLong()), "Todo does not exist");
+    }
+
+    @Test
     void shouldCompleteNewTaskSuccessfully(TestInfo testInfo) {
         // Given
         Todo newTodo = todoService.save(testInfo.getDisplayName());
