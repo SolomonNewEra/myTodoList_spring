@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -17,42 +18,36 @@ public class TodoServiceImpl implements TodoService {
     private final TodoRepository todoRepository;
 
     @Override
-    public Todo findById(Long id) {
-        // Retrieves the todo by id from the database and if no dodo is available, it will return null
-        return todoRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public Todo save(String task) {
-        Todo todo = new Todo();
-        todo.setTask(task);
-        todo.setCompleted(Boolean.FALSE); // All todos will have completed set to false unless they are completed.
-
-        return todoRepository.save(todo);
-    }
-
-    @Override
-    public List<Todo> findAll() {
+    public List<Todo> listOfMytodo() {
         return todoRepository.findAll();
     }
 
     @Override
-    public Boolean completeTask(Long id) {
-        // Retrieve the todo that we want to change the completed field from the database by id.
-        Optional<Todo> optionalTodo = todoRepository.findById(id);
+    public Todo saveMyTodo(Todo todo) {
+        return todoRepository.save(todo);
+    }
 
-        // if that todo is present, we want to retrieve it and change the completed field to true.
-        if (optionalTodo.isPresent()) {
-            Todo todo = optionalTodo.get();
-            todo.setCompleted(Boolean.TRUE);
+    @Override
+    public Optional<Todo> fetchTodoById(Long id) {
+        return todoRepository.findById(id);
+    }
 
-            // Once this change is done, we need to save it back to the database with the new changes.
-            todoRepository.save(todo);
-            // return true that the change was successful.
-            return true;
+    @Override
+    public void deleteById(Long id) {
+        todoRepository.deleteById(id);
+    }
+
+    @Override
+    public Todo updateToDo(Long id, Todo todo) {
+        Todo TempTodo=todoRepository.findById(id).get();
+
+        if(Objects.nonNull(todo.getTask()) && !"".equalsIgnoreCase(todo.getTask())){
+            TempTodo.setTask(todo.getTask());
         }
-        // if not present, then return that the change was not successful
-        return false;
+        if(Objects.nonNull(todo.getCompleted()) && !"".equalsIgnoreCase(todo.getCompleted().toString())){
+            TempTodo.setCompleted(todo.getCompleted());
+        }
+        return todoRepository.save(TempTodo);
     }
 
 }
