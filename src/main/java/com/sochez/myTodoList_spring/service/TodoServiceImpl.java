@@ -23,8 +23,11 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public Todo saveMyTodo(Todo todo) {
-        return todoRepository.save(todo);
+    public Todo saveMyTodo(String task) {
+        Todo mytodo =new Todo();
+        mytodo.setTask(task);
+        mytodo.setCompleted(Boolean.FALSE);
+        return todoRepository.save(mytodo);
     }
 
     @Override
@@ -39,7 +42,9 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public Todo updateToDo(Long id, Todo todo) {
+        //Optional data type, i need to ad isPresentCheck()
         Todo TempTodo=todoRepository.findById(id).get();
+
 
         if(Objects.nonNull(todo.getTask()) && !"".equalsIgnoreCase(todo.getTask())){
             TempTodo.setTask(todo.getTask());

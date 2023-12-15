@@ -14,7 +14,7 @@ public interface TodoService {
 
     List<Todo> listOfMytodo();
 
-    Todo saveMyTodo(Todo todo);
+    Todo saveMyTodo(String task);
 
     Optional<Todo> fetchTodoById(Long id);
 
